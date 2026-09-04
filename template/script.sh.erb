@@ -3,11 +3,9 @@
 # Benchmark info
 echo "TIMING - Starting main script at: $(date)"
 
-# Set working directory to home directory
-cd "${HOME}"
-
-# Clear any existing XDG_RUNTIME_DIR to avoid warnings from dconf
-unset XDG_RUNTIME_DIR
+# Set working directory to marimo_notebooks directory
+MARIMO_NB_DIR="${HOME}/marimo_notebooks"
+mkdir -p "${MARIMO_NB_DIR}"
 
 <%- unless context.modules.blank? -%>
 # Purge the module environment to avoid conflicts
@@ -21,21 +19,22 @@ module list
 <%- end -%>
 
 # Benchmark info
-echo "TIMING - Starting QuPath at: $(date)"
+echo "TIMING - Starting marimo at: $(date)"
 
-# Launch QuPath using xpra
-set -x
-apptainer exec ${CONTAINER} xpra start \
-    --minimal=yes \
-    --bind-tcp=0.0.0.0:${PORT},auth=file,filename=${PASSWORD_FILE} \
-    --websocket-upgrade=yes \
-    --socket-dirs=${PWD} \
-    --opengl=yes \
-    --html=on \
-    --compression-level=1 \
-    --start="/QuPath/bin/QuPath -Dqupath.prefs.name=myPrefs" \
-    --exit-with-windows=yes \
-    --daemon=no \
-    --clipboard=yes \
-    --xvfb="/usr/bin/Xvfb +extension Composite -screen 0 1920x1080x24+32 -nolisten tcp -noreset -auth ${XAUTHORITY}" \
-    $DISPLAY
+# Launch marimo
+#
+# Each job gets a private /tmp, so the uv cache, the downloaded Python
+# interpreters and the per-notebook sandbox venvs (created there by marimo via
+# mkdtemp) all live under /tmp and are discarded with the job.
+
+apptainer exec \
+    --env UV_CACHE_DIR=/tmp/uv \
+    --env UV_PYTHON_INSTALL_DIR=/tmp/uv/python \
+    --env UV_LINK_MODE=hardlink \
+    "${CONTAINER}" \
+    uv tool run marimo edit "${MARIMO_NB_DIR}" \
+    --sandbox \
+    --headless \
+    --host 0.0.0.0 \
+    --port "${PORT}" \
+    --token --token-password-file "${PASSWORD_FILE}"

@@ -33,7 +33,7 @@ batch_connect:
 #  native: # ... array of command line arguments ...
 script:
   native:
-    - "--job-name=ood-qupath"
+    - "--job-name=ood-marimo"
     - "-A"
     - "jaxuser"
     - "--mem=<%= memtask %>"
@@ -47,6 +47,3 @@ script:
     - "<%= num_cores %>"
     - "-N"
     - "1"
-    <% if bc_email_warning=="1" %>
-    - "--mail-type=TIME_LIMIT=90"
-    <% end %>

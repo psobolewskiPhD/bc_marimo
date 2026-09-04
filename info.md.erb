@@ -4,6 +4,8 @@
 
 - Closing your browser window or tab will NOT stop the running job or web session. Likewise, if you experience network issues, you may be disconnected from your web session and be returned to a login page, however the job and web session *will still be running*. You can reconnect freely using the Connect button below.  
 
-- *Closing the application* within the web session *will* also stop the web session and then the job will be canceled; your browser will display a "Failed to connect" message.
+- marimo will be running in sandbox mode; environments will be (re)created from scratch for each session, so there may be a delay while setup is happening.
+
+- marimo notebooks will be saved with their dependencies in your home directory in a directory named `marimo_notebooks`.
 
 - If you wish to stop the job and web session, please use the "Cancel" button above.
