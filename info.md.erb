@@ -4,8 +4,12 @@
 
 - Closing your browser window or tab will NOT stop the running job or web session. Likewise, if you experience network issues, you may be disconnected from your web session and be returned to a login page, however the job and web session *will still be running*. You can reconnect freely using the Connect button below.  
 
-- marimo will be running in sandbox mode; environments will be (re)created from scratch for each session, so there may be a delay while setup is happening.
 
-- marimo notebooks will be saved with their dependencies in your home directory in a directory named `marimo_notebooks`.
+### marimo
 
-- If you wish to stop the job and web session, please use the "Cancel" button above.
+- marimo will be running in sandbox mode in a directory named `marimo_notebooks` in your home directory.
+- You can install dependencies by simply importing them in your notebook code; marimo will prompt you to install them.
+- marimo notebooks you create will be saved with metadata specifying any direct dependencies (packages you imported in your code).
+- Virtual environments will not be retained between sessions, saving disk space. They will be (re)created from scratch, so there may be a delay while setup is happening.
+
+- If you wish to stop the job and web session, please use the "Cancel" button above or shut down the marimo session using the red `x` button in the top right-hand corner of the  home page.
